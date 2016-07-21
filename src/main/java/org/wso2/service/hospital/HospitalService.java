@@ -66,6 +66,7 @@ public class HospitalService {
     @Path("/{category}/reserve")
     public Response reserveAppointment(AppointmentRequest appointmentRequest, @PathParam("category") String category) {
 
+        Gson gson = new Gson();
         // Check whether the requested category available
         if (HospitalDAO.catergories.contains(category)) {
             Appointment appointment = HospitalUtil.makeNewAppointment(appointmentRequest);
@@ -76,7 +77,7 @@ public class HospitalService {
                 HospitalDAO.patientRecordMap.put(appointmentRequest.getPatient().getSsn(), patientRecord);
             }
 
-            String jsonResponse = "{\"appointment_id\":" + appointment.getAppointmentNumber() + "}";
+            String jsonResponse = gson.toJson(appointment);
             return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
         } else {
             // Cannot find a doctor for this category
