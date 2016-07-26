@@ -70,6 +70,13 @@ public class HospitalService {
         // Check whether the requested category available
         if (HospitalDAO.catergories.contains(category)) {
             Appointment appointment = HospitalUtil.makeNewAppointment(appointmentRequest);
+
+            if (appointment == null) {
+                String jsonResponse = "{\"Status\":\"Doctor "+ appointmentRequest.getDoctor() + " isn't available in " +
+                         appointmentRequest.getHospital() +" \"}";
+                return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+            }
+
             this.appointments.put(appointment.getAppointmentNumber(), appointment);
             HospitalDAO.patientMap.put(appointmentRequest.getPatient().getSsn(), appointmentRequest.getPatient());
             if (!HospitalDAO.patientRecordMap.containsKey(appointmentRequest.getPatient().getSsn())) {
