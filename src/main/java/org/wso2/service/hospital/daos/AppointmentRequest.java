@@ -10,10 +10,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class AppointmentRequest {
     private Patient patient;
     private String doctor;
+    private String hospital;
 
-    public AppointmentRequest(Patient patient, String doctor) {
+    public AppointmentRequest(Patient patient, String doctor, String hospital) {
         this.patient = patient;
         this.doctor = doctor;
+        this.hospital = hospital;
     }
 
     public Patient getPatient() {
@@ -30,5 +32,13 @@ public class AppointmentRequest {
 
     public void setDoctor(String doctor) {
         this.doctor = doctor;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(String hospital) {
+        this.hospital = hospital;
     }
 }

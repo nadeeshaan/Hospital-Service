@@ -18,7 +18,7 @@ public class HospitalUtil {
         newAppointment.setAppointmentNumber(appointmentNumber++);
         newAppointment.setDoctor(doctor);
         newAppointment.setPatient(appointmentRequest.getPatient());
-        newAppointment.setFee(123.456);
+        newAppointment.setFee(doctor.getFee());
         newAppointment.setConfirmed(false);
 
         return newAppointment;
