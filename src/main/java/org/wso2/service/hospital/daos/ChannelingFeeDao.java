@@ -7,8 +7,8 @@ public class ChannelingFeeDao {
     String patientName;
     String doctorName;
     String actualFee;
-    String discountedFee;
-    String discount;
+//    String discountedFee;
+//    String discount;
 
     public String getPatientName() {
         return patientName;
@@ -34,19 +34,19 @@ public class ChannelingFeeDao {
         this.actualFee = actualFee;
     }
 
-    public String getDiscountedFee() {
-        return discountedFee;
-    }
+//    public String getDiscountedFee() {
+//        return discountedFee;
+//    }
 
-    public void setDiscountedFee(String discountedFee) {
-        this.discountedFee = discountedFee;
-    }
+//    public void setDiscountedFee(String discountedFee) {
+//        this.discountedFee = discountedFee;
+//    }
 
-    public String getDiscount() {
-        return discount;
-    }
+//    public String getDiscount() {
+//        return discount;
+//    }
 
-    public void setDiscount(String discount) {
-        this.discount = discount;
-    }
+//    public void setDiscount(String discount) {
+//        this.discount = discount;
+//    }
 }

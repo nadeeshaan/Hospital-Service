@@ -102,12 +102,12 @@ public class HospitalService {
         if (appointments.containsKey(id)) {
             Patient patient = appointments.get(id).getPatient();
             Doctor doctor = appointments.get(id).getDoctor();
-            int discount = HospitalUtil.checkForDiscounts(patient.getDob());
-            double discounted = (((HospitalDAO.findDoctorByName(doctor.getName()).getFee())/100)*(100-discount));
+//            int discount = HospitalUtil.checkForDiscounts(patient.getDob());
+//            double discounted = (((HospitalDAO.findDoctorByName(doctor.getName()).getFee())/100)*(100-discount));
 
             channelingFee.setActualFee(Double.toString(doctor.getFee()));
-            channelingFee.setDiscountedFee(Double.toString(discounted));
-            channelingFee.setDiscount(Integer.toString(discount));
+//            channelingFee.setDiscountedFee(Double.toString(discounted));
+//            channelingFee.setDiscount(Integer.toString(discount));
             channelingFee.setDoctorName(doctor.getName());
             channelingFee.setPatientName(patient.getName());
 
