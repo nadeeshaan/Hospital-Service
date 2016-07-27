@@ -157,4 +157,20 @@ public class HospitalService {
                     MediaType.APPLICATION_JSON).build();
         }
     }
+
+    @GET
+    @Path("/patient/appointment/{appointment_id}/discount")
+    public Response isEligibleForDiscount(@PathParam("appointment_id") int id) {
+        Gson gson = new Gson();
+        String jsonResponse = "";
+        Appointment appointment = appointments.get(id);
+        if (appointment == null) {
+            jsonResponse = "{\"status\":\"Invalid appointment ID\"}";
+        } else {
+            boolean eligible = HospitalUtil.checDiscountEligibility(appointment.getPatient().getDob());
+            jsonResponse = "{\"status\":\"" + eligible + "\"}";
+        }
+
+        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+    }
 }

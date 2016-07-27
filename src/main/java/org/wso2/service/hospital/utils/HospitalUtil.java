@@ -41,4 +41,16 @@ public class HospitalUtil {
             return 0;
         }
     }
+
+    public static boolean checDiscountEligibility(String dob) {
+        int yob = Integer.parseInt(dob.split("-")[0]);
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int age = currentYear - yob;
+
+        if (age < 12 || age > 55) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
