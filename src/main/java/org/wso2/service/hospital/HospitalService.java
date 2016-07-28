@@ -41,10 +41,10 @@ public class HospitalService {
 
     public HospitalService() {
         fillCategories();
-        HospitalDAO.doctorsList.add((new Doctor("thomas collins", "grand Oak community hospital ", "surgery", "9.00 a.m - 11.00 a.m", 7000)));
-        HospitalDAO.doctorsList.add((new Doctor("henry parker", "grand Oak community hospital ", "ent", "9.00 a.m - 11.00 a.m", 4500)));
-        HospitalDAO.doctorsList.add((new Doctor("abner jones", "grand Oak community hospital ", "gynaecology", "8.00 a.m - 10.00 a.m", 11000)));
-        HospitalDAO.doctorsList.add((new Doctor("abner jones", "grand Oak community hospital ", "ent", "8.00 a.m - 10.00 a.m", 6750)));
+        HospitalDAO.doctorsList.add((new Doctor("thomas collins", "grand oak community hospital", "surgery", "9.00 a.m - 11.00 a.m", 7000)));
+        HospitalDAO.doctorsList.add((new Doctor("henry parker", "grand oak community hospital", "ent", "9.00 a.m - 11.00 a.m", 4500)));
+        HospitalDAO.doctorsList.add((new Doctor("abner jones", "grand oak community hospital", "gynaecology", "8.00 a.m - 10.00 a.m", 11000)));
+        HospitalDAO.doctorsList.add((new Doctor("abner jones", "grand oak community hospital", "ent", "8.00 a.m - 10.00 a.m", 6750)));
         HospitalDAO.doctorsList.add((new Doctor("anne clement", "clemency medical center", "surgery", "8.00 a.m - 10.00 a.m", 12000)));
         HospitalDAO.doctorsList.add((new Doctor("thomas kirk", "clemency medical center", "gynaecology", "9.00 a.m - 11.00 a.m", 8000)));
         HospitalDAO.doctorsList.add((new Doctor("cailen cooper", "clemency medical center", "paediatric", "9.00 a.m - 11.00 a.m", 5500)));
