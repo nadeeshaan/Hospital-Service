@@ -108,8 +108,8 @@ public class HospitalService {
             channelingFee.setActualFee(Double.toString(doctor.getFee()));
 //            channelingFee.setDiscountedFee(Double.toString(discounted));
 //            channelingFee.setDiscount(Integer.toString(discount));
-            channelingFee.setDoctorName(doctor.getName());
-            channelingFee.setPatientName(patient.getName());
+            channelingFee.setDoctorName(doctor.getName().toLowerCase());
+            channelingFee.setPatientName(patient.getName().toLowerCase());
 
             return Response.ok(gson.toJson(channelingFee), MediaType.APPLICATION_JSON).build();
         } else {
