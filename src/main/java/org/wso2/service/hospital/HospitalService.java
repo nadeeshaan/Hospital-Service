@@ -66,15 +66,14 @@ public class HospitalService {
     @Path("/{category}/reserve")
     public Response reserveAppointment(AppointmentRequest appointmentRequest, @PathParam("category") String category) {
 
-        Gson gson = new Gson();
         // Check whether the requested category available
         if (HospitalDAO.catergories.contains(category)) {
             Appointment appointment = HospitalUtil.makeNewAppointment(appointmentRequest);
 
             if (appointment == null) {
-                String jsonResponse = "{\"Status\":\"Doctor "+ appointmentRequest.getDoctor() + " isn't available in " +
-                         appointmentRequest.getHospital() +" \"}";
-                return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+                Status status = new Status("Doctor "+ appointmentRequest.getDoctor() + " isn't available in " +
+                        appointmentRequest.getHospital());
+                return Response.status(Response.Status.OK) .entity(status).type(MediaType.APPLICATION_JSON).build();
             }
 
             this.appointments.put(appointment.getAppointmentNumber(), appointment);
@@ -84,12 +83,11 @@ public class HospitalService {
                 HospitalDAO.patientRecordMap.put(appointmentRequest.getPatient().getSsn(), patientRecord);
             }
 
-            String jsonResponse = gson.toJson(appointment);
-            return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.OK) .entity(appointment).type(MediaType.APPLICATION_JSON).build();
         } else {
             // Cannot find a doctor for this category
-            String jsonResponse = "{\"Status\":\"Invalid Category\"}";
-            return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+            Status status = new Status("Invalid Category");
+            return Response.ok(status, MediaType.APPLICATION_JSON).build();
         }
     }
 
@@ -97,24 +95,19 @@ public class HospitalService {
     @Path("/appointments/{appointment_id}/fee")
     public Response checkChannellingFee(@PathParam("appointment_id") int id) {
         //Check for the appointment number validity
-        Gson gson = new Gson();
         ChannelingFeeDao channelingFee = new ChannelingFeeDao();
         if (appointments.containsKey(id)) {
             Patient patient = appointments.get(id).getPatient();
             Doctor doctor = appointments.get(id).getDoctor();
-//            int discount = HospitalUtil.checkForDiscounts(patient.getDob());
-//            double discounted = (((HospitalDAO.findDoctorByName(doctor.getName()).getFee())/100)*(100-discount));
 
             channelingFee.setActualFee(Double.toString(doctor.getFee()));
-//            channelingFee.setDiscountedFee(Double.toString(discounted));
-//            channelingFee.setDiscount(Integer.toString(discount));
             channelingFee.setDoctorName(doctor.getName().toLowerCase());
             channelingFee.setPatientName(patient.getName().toLowerCase());
 
-            return Response.ok(gson.toJson(channelingFee), MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.OK) .entity(channelingFee).type(MediaType.APPLICATION_JSON).build();
         } else {
-            String jsonResponse = "{\"Status\":\"Error.Could not Find the Requested appointment ID\"}";
-            return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+            Status status = new Status("Error.Could not Find the Requested appointment ID");
+            return Response.status(Response.Status.OK) .entity(status).type(MediaType.APPLICATION_JSON).build();
         }
     }
 
@@ -131,46 +124,42 @@ public class HospitalService {
             if (patient != null) {
                 patientRecord.updateSymptoms(symptoms);
                 patientRecord.updateTreatments(treatments);
-                return Response.ok("{\"Status\":\"Record Update Success\"}",
-                        MediaType.APPLICATION_JSON).build();
+                Status status =new Status("Record Update Success");
+                return Response.status(Response.Status.OK) .entity(status).type(MediaType.APPLICATION_JSON).build();
             } else {
-                return Response.ok("{\"Status\":\"Could not find valid Patient Record\"}",
-                        MediaType.APPLICATION_JSON).build();
+                Status status =new Status("Could not find valid Patient Record");
+                return Response.status(Response.Status.OK) .entity(status).type(MediaType.APPLICATION_JSON).build();
             }
         } else {
-            return Response.ok("{\"Status\":\"Could not find valid Patient Entry\"}",
-                    MediaType.APPLICATION_JSON).build();
+            Status status =new Status("Could not find valid Patient Entry");
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
         }
     }
 
     @GET
     @Path("/patient/{SSN}/getrecord")
     public Response getPatientRecord(@PathParam("SSN") String SSN) {
-        Gson gson = new Gson();
         PatientRecord patientRecord = HospitalDAO.patientRecordMap.get(SSN);
 
         if (patientRecord == null) {
-            return Response.ok("{\"Status\":\"Could not find valid Patient Entry\"}",
-                    MediaType.APPLICATION_JSON).build();
+            Status status =new Status("Could not find valid Patient Entry");
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
         } else {
-            return Response.ok(gson.toJson(patientRecord),
-                    MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.OK).entity(patientRecord).type(MediaType.APPLICATION_JSON).build();
         }
     }
 
     @GET
     @Path("/patient/appointment/{appointment_id}/discount")
     public Response isEligibleForDiscount(@PathParam("appointment_id") int id) {
-        Gson gson = new Gson();
-        String jsonResponse = "";
         Appointment appointment = appointments.get(id);
         if (appointment == null) {
-            jsonResponse = "{\"status\":\"Invalid appointment ID\"}";
+            Status status =new Status("Invalid appointment ID");
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
         } else {
             boolean eligible = HospitalUtil.checDiscountEligibility(appointment.getPatient().getDob());
-            jsonResponse = "{\"status\":\"" + eligible + "\"}";
+            Status status = new Status(String.valueOf(eligible));
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
         }
-
-        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
 }
