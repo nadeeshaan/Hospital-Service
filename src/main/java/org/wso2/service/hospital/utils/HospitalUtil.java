@@ -9,7 +9,7 @@ import java.util.Calendar;
  */
 public class HospitalUtil {
 
-    public static int appointmentNumber = 0;
+    public static int appointmentNumber = 1;
 
     public static Appointment makeNewAppointment(AppointmentRequest appointmentRequest) {
 
