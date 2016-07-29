@@ -15,7 +15,7 @@ public class HospitalUtil {
 
         Appointment newAppointment = new Appointment();
         Doctor doctor = HospitalDAO.findDoctorByName(appointmentRequest.getDoctor());
-        if (!doctor.getHospital().equalsIgnoreCase(appointmentRequest.getHospital())) {
+        if (doctor == null || !doctor.getHospital().equalsIgnoreCase(appointmentRequest.getHospital())) {
             return null;
         }
         newAppointment.setAppointmentNumber(appointmentNumber++);
