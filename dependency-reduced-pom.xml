@@ -10,7 +10,7 @@
   <groupId>org.wso2</groupId>
   <artifactId>Hospital-Service</artifactId>
   <name>WSO2 MSF4J Microservice</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <properties>
     <microservice.mainClass>org.wso2.service.hospital.Application</microservice.mainClass>
   </properties>
