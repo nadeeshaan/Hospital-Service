@@ -3,14 +3,14 @@
   <parent>
     <artifactId>msf4j-service</artifactId>
     <groupId>org.wso2.msf4j</groupId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <relativePath>../pom.xml/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.wso2</groupId>
   <artifactId>Hospital-Service</artifactId>
   <name>WSO2 MSF4J Microservice</name>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <properties>
     <microservice.mainClass>org.wso2.service.hospital.Application</microservice.mainClass>
   </properties>
