@@ -9,12 +9,12 @@ import java.util.List;
  */
 public class HospitalDAO {
 
-    public static List<Doctor> doctorsList = new ArrayList<>();
-    public static List<String> catergories = new ArrayList<>();
-    public static HashMap<String, Patient> patientMap= new HashMap();
-    public static HashMap<String, PatientRecord> patientRecordMap = new HashMap();
+    private List<Doctor> doctorsList = new ArrayList<>();
+    private List<String> catergories = new ArrayList<>();
+    private HashMap<String, Patient> patientMap= new HashMap();
+    private HashMap<String, PatientRecord> patientRecordMap = new HashMap();
 
-    public static List<Doctor> findDoctorByCategory(String category) {
+    public List<Doctor> findDoctorByCategory(String category) {
         List<Doctor> list = new ArrayList<>();
         for (Doctor doctor: doctorsList) {
             if (category.equals(doctor.getCategory())) {
@@ -24,7 +24,7 @@ public class HospitalDAO {
         return list;
     }
 
-    public static Doctor findDoctorByName(String name) {
+    public Doctor findDoctorByName(String name) {
         for (Doctor doctor: doctorsList) {
             if (doctor.getName().equals(name)) {
                 return doctor;
@@ -34,4 +34,35 @@ public class HospitalDAO {
         return null;
     }
 
+    public List<Doctor> getDoctorsList() {
+        return doctorsList;
+    }
+
+    public void setDoctorsList(List<Doctor> doctorsList) {
+        this.doctorsList = doctorsList;
+    }
+
+    public List<String> getCatergories() {
+        return catergories;
+    }
+
+    public void setCatergories(List<String> catergories) {
+        this.catergories = catergories;
+    }
+
+    public HashMap<String, Patient> getPatientMap() {
+        return patientMap;
+    }
+
+    public void setPatientMap(HashMap<String, Patient> patientMap) {
+        this.patientMap = patientMap;
+    }
+
+    public HashMap<String, PatientRecord> getPatientRecordMap() {
+        return patientRecordMap;
+    }
+
+    public void setPatientRecordMap(HashMap<String, PatientRecord> patientRecordMap) {
+        this.patientRecordMap = patientRecordMap;
+    }
 }

@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import org.wso2.service.hospital.daos.*;
 import org.wso2.service.hospital.utils.HospitalUtil;
 
+import javax.print.Doc;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -34,41 +35,27 @@ import java.util.Map;
  *
  * @since 1.0.0-SNAPSHOT
  */
-@Path("/hospital/categories")
 public class HospitalService {
 
     private Map<Integer, Appointment> appointments = new HashMap<>();
+    private HospitalDAO hospitalDAO = new HospitalDAO();
+    List<String> catergories = hospitalDAO.getCatergories();
+    List<Doctor> doctorsList = hospitalDAO.getDoctorsList();
+
 
     public HospitalService() {
-        fillCategories();
-        HospitalDAO.doctorsList.add((new Doctor("thomas collins", "grand oak community hospital", "surgery", "9.00 a.m - 11.00 a.m", 7000)));
-        HospitalDAO.doctorsList.add((new Doctor("henry parker", "grand oak community hospital", "ent", "9.00 a.m - 11.00 a.m", 4500)));
-        HospitalDAO.doctorsList.add((new Doctor("abner jones", "grand oak community hospital", "gynaecology", "8.00 a.m - 10.00 a.m", 11000)));
-        HospitalDAO.doctorsList.add((new Doctor("abner jones", "grand oak community hospital", "ent", "8.00 a.m - 10.00 a.m", 6750)));
-        HospitalDAO.doctorsList.add((new Doctor("anne clement", "clemency medical center", "surgery", "8.00 a.m - 10.00 a.m", 12000)));
-        HospitalDAO.doctorsList.add((new Doctor("thomas kirk", "clemency medical center", "gynaecology", "9.00 a.m - 11.00 a.m", 8000)));
-        HospitalDAO.doctorsList.add((new Doctor("cailen cooper", "clemency medical center", "paediatric", "9.00 a.m - 11.00 a.m", 5500)));
-        HospitalDAO.doctorsList.add((new Doctor("seth mears", "pine valley community hospital", "surgery", "3.00 p.m - 5.00 p.m", 8000)));
-        HospitalDAO.doctorsList.add((new Doctor("emeline fulton", "pine valley community hospital", "cardiology", "8.00 a.m - 10.00 a.m", 4000)));
-        HospitalDAO.doctorsList.add((new Doctor("jared morris", "willow gardens general hospital", "cardiology", "9.00 a.m - 11.00 a.m", 10000)));
-        HospitalDAO.doctorsList.add((new Doctor("henry foster", "willow gardens general hospital", "paediatric", "8.00 a.m - 10.00 a.m", 10000)));
+        catergories.add("surgery");
+        catergories.add("cardiology");
+        catergories.add("gynaecology");
+        catergories.add("ent");
+        catergories.add("paediatric");
     }
 
-    public void fillCategories() {
-        HospitalDAO.catergories.add("surgery");
-        HospitalDAO.catergories.add("cardiology");
-        HospitalDAO.catergories.add("gynaecology");
-        HospitalDAO.catergories.add("ent");
-        HospitalDAO.catergories.add("paediatric");
-    }
-
-    @POST
-    @Path("/{category}/reserve")
     public Response reserveAppointment(AppointmentRequest appointmentRequest, @PathParam("category") String category) {
 
         // Check whether the requested category available
-        if (HospitalDAO.catergories.contains(category)) {
-            Appointment appointment = HospitalUtil.makeNewAppointment(appointmentRequest);
+        if (hospitalDAO.getCatergories().contains(category)) {
+            Appointment appointment = HospitalUtil.makeNewAppointment(appointmentRequest, this.hospitalDAO);
 
             if (appointment == null) {
                 Status status = new Status("Doctor "+ appointmentRequest.getDoctor() + " isn't available in " +
@@ -77,10 +64,10 @@ public class HospitalService {
             }
 
             this.appointments.put(appointment.getAppointmentNumber(), appointment);
-            HospitalDAO.patientMap.put(appointmentRequest.getPatient().getSsn(), appointmentRequest.getPatient());
-            if (!HospitalDAO.patientRecordMap.containsKey(appointmentRequest.getPatient().getSsn())) {
+            hospitalDAO.getPatientMap().put(appointmentRequest.getPatient().getSsn(), appointmentRequest.getPatient());
+            if (!hospitalDAO.getPatientRecordMap().containsKey(appointmentRequest.getPatient().getSsn())) {
                 PatientRecord patientRecord = new PatientRecord(appointmentRequest.getPatient());
-                HospitalDAO.patientRecordMap.put(appointmentRequest.getPatient().getSsn(), patientRecord);
+                hospitalDAO.getPatientRecordMap().put(appointmentRequest.getPatient().getSsn(), patientRecord);
             }
 
             return Response.status(Response.Status.OK) .entity(appointment).type(MediaType.APPLICATION_JSON).build();
@@ -91,8 +78,6 @@ public class HospitalService {
         }
     }
 
-    @GET
-    @Path("/appointments/{appointment_id}/fee")
     public Response checkChannellingFee(@PathParam("appointment_id") int id) {
         //Check for the appointment number validity
         ChannelingFeeDao channelingFee = new ChannelingFeeDao();
@@ -111,16 +96,14 @@ public class HospitalService {
         }
     }
 
-    @POST
-    @Path("/patient/updaterecord")
     public Response updatePatientRecord(HashMap<String,Object> patientDetails) {
         String SSN = (String)patientDetails.get("SSN");
         List symptoms = (List)patientDetails.get("symptoms");
         List treatments = (List)patientDetails.get("treatments");
 
-        if (HospitalDAO.patientMap.get(SSN) != null) {
-            Patient patient = HospitalDAO.patientMap.get(SSN);
-            PatientRecord patientRecord = HospitalDAO.patientRecordMap.get(SSN);
+        if (hospitalDAO.getPatientMap().get(SSN) != null) {
+            Patient patient = hospitalDAO.getPatientMap().get(SSN);
+            PatientRecord patientRecord = hospitalDAO.getPatientRecordMap().get(SSN);
             if (patient != null) {
                 patientRecord.updateSymptoms(symptoms);
                 patientRecord.updateTreatments(treatments);
@@ -136,10 +119,8 @@ public class HospitalService {
         }
     }
 
-    @GET
-    @Path("/patient/{SSN}/getrecord")
     public Response getPatientRecord(@PathParam("SSN") String SSN) {
-        PatientRecord patientRecord = HospitalDAO.patientRecordMap.get(SSN);
+        PatientRecord patientRecord = hospitalDAO.getPatientRecordMap().get(SSN);
 
         if (patientRecord == null) {
             Status status =new Status("Could not find valid Patient Entry");
@@ -149,8 +130,6 @@ public class HospitalService {
         }
     }
 
-    @GET
-    @Path("/patient/appointment/{appointment_id}/discount")
     public Response isEligibleForDiscount(@PathParam("appointment_id") int id) {
         Appointment appointment = appointments.get(id);
         if (appointment == null) {

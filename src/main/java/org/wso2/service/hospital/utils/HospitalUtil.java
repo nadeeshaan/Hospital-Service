@@ -11,10 +11,10 @@ public class HospitalUtil {
 
     public static int appointmentNumber = 1;
 
-    public static Appointment makeNewAppointment(AppointmentRequest appointmentRequest) {
+    public static Appointment makeNewAppointment(AppointmentRequest appointmentRequest, HospitalDAO hospitalDAO) {
 
         Appointment newAppointment = new Appointment();
-        Doctor doctor = HospitalDAO.findDoctorByName(appointmentRequest.getDoctor());
+        Doctor doctor = hospitalDAO.findDoctorByName(appointmentRequest.getDoctor());
         if (doctor == null || !doctor.getHospital().equalsIgnoreCase(appointmentRequest.getHospital())) {
             return null;
         }
