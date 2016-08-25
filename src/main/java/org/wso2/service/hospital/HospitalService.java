@@ -16,12 +16,17 @@
 
 package org.wso2.service.hospital;
 
-import com.google.gson.Gson;
-import org.wso2.service.hospital.daos.*;
+import org.wso2.service.hospital.daos.Appointment;
+import org.wso2.service.hospital.daos.AppointmentRequest;
+import org.wso2.service.hospital.daos.ChannelingFeeDao;
+import org.wso2.service.hospital.daos.Doctor;
+import org.wso2.service.hospital.daos.HospitalDAO;
+import org.wso2.service.hospital.daos.Patient;
+import org.wso2.service.hospital.daos.PatientRecord;
+import org.wso2.service.hospital.daos.Status;
 import org.wso2.service.hospital.utils.HospitalUtil;
 
-import javax.print.Doc;
-import javax.ws.rs.*;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -58,7 +63,7 @@ public class HospitalService {
             Appointment appointment = HospitalUtil.makeNewAppointment(appointmentRequest, this.hospitalDAO);
 
             if (appointment == null) {
-                Status status = new Status("Doctor "+ appointmentRequest.getDoctor() + " isn't available in " +
+                Status status = new Status("Doctor "+ appointmentRequest.getDoctor() + " is not available in " +
                         appointmentRequest.getHospital());
                 return Response.status(Response.Status.OK) .entity(status).type(MediaType.APPLICATION_JSON).build();
             }
