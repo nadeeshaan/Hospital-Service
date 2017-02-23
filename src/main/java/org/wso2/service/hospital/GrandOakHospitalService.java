@@ -53,4 +53,10 @@ public class GrandOakHospitalService extends HospitalService {
     public Response isEligibleForDiscount(@PathParam("appointment_id") int id) {
         return super.isEligibleForDiscount(id);
     }
+
+    @POST
+    @Path("/admin/doctor/newdoctor")
+    public Response addNewDoctor(Doctor doctor) {
+        return super.addNewDoctor(doctor);
+    }
 }

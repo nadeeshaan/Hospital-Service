@@ -146,4 +146,19 @@ public class HospitalService {
             return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
         }
     }
+
+    public Response addNewDoctor(Doctor doctor) {
+        String category = doctor.getCategory();
+        if (!catergories.contains(category)) {
+            catergories.add(category);
+        }
+        if (this.hospitalDAO.findDoctorByName(doctor.getName()) == null) {
+            this.doctorsList.add(doctor);
+            Status status =new Status("New Doctor Added Successfully");
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
+        } else {
+            Status status =new Status("Doctor Already Exist in the system");
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
 }

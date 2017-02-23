@@ -54,7 +54,7 @@ public class HealthcareService {
     @GET
     @Path("/{category}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCategories(@PathParam("category") String category) {
+    public Response getDoctorsByCategory(@PathParam("category") String category) {
         List<Doctor> stock = HealthcareDao.findDoctorByCategory(category);
         Gson gson = new Gson();
         String jsonResponse;
@@ -105,11 +105,37 @@ public class HealthcareService {
         }
     }
 
+    @POST
+    @Path("/admin/newdoctor")
+    public Response addNewDoctor(Doctor doctor) {
+        String category = doctor.getCategory();
+        if (!HealthcareDao.catergories.contains(category)) {
+            HealthcareDao.catergories.add(category);
+        }
+        if (this.findDoctorByName(doctor.getName()) == null) {
+            HealthcareDao.doctorsList.add(doctor);
+            Status status =new Status("New Doctor Added Successfully");
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
+        } else {
+            Status status =new Status("Doctor Already Exist in the system");
+            return Response.status(Response.Status.OK).entity(status).type(MediaType.APPLICATION_JSON).build();
+        }
+    }
+
     public void fillCategories() {
         HealthcareDao.catergories.add("surgery");
         HealthcareDao.catergories.add("cardiology");
         HealthcareDao.catergories.add("gynaecology");
         HealthcareDao.catergories.add("ent");
         HealthcareDao.catergories.add("paediatric");
+    }
+
+    private Doctor findDoctorByName(String name) {
+        for (Doctor doctor: HealthcareDao.doctorsList) {
+            if (doctor.getName().equals(name)) {
+                return doctor;
+            }
+        }
+        return null;
     }
 }
