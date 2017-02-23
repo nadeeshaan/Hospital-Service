@@ -54,7 +54,7 @@ public class PineValleyHospitalService extends HospitalService {
     }
 
     @POST
-    @Path("/admin/doctor/newdoctor")
+    @Path("/admin/newdoctor")
     public Response addNewDoctor(Doctor doctor) {
         return super.addNewDoctor(doctor);
     }
